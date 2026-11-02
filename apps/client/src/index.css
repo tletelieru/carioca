@@ -1,0 +1,290 @@
+@import 'tailwindcss';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --bg: #e1e8ef;
+  --surface: #f3f7fa;
+  --raised: #ccd8e3;
+  --ink: #15222e;
+  --muted: #51606d;
+  --accent: #1f5f99;
+  --on-accent: #ffffff;
+  --gold: #8f5b0c;
+  --line: rgba(0, 0, 0, 0.16);
+  --card: #fbf5e6;
+  --card-ink: #1c2230;
+  --card-red: #c2362f;
+  --card-shadow: rgba(0, 0, 0, 0.3);
+}
+
+.dark {
+  --bg: #0f1a26;
+  --surface: #172636;
+  --raised: #22364a;
+  --ink: #eaf0f5;
+  --muted: #a1b2c2;
+  --accent: #4a9be0;
+  --on-accent: #08121c;
+  --gold: #f0b541;
+  --line: rgba(255, 255, 255, 0.16);
+  --card: #f6efdc;
+  --card-ink: #1c2230;
+  --card-red: #c2362f;
+  --card-shadow: rgba(0, 0, 0, 0.5);
+}
+
+:root {
+  --game-font: 'VT323', ui-monospace, monospace;
+  --size-xs: 0.95rem;
+  --size-sm: 1.1rem;
+  --size-base: 1.25rem;
+}
+
+.plain-font {
+  --game-font: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --size-xs: 0.75rem;
+  --size-sm: 0.875rem;
+  --size-base: 1rem;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-raised: var(--raised);
+  --color-line: var(--line);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-on-accent: var(--on-accent);
+  --color-gold: var(--gold);
+  --color-card: var(--card);
+  --color-card-ink: var(--card-ink);
+  --color-card-red: var(--card-red);
+  --font-pixel: var(--game-font);
+  --text-xs: var(--size-xs);
+  --text-sm: var(--size-sm);
+  --text-base: var(--size-base);
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--game-font);
+  font-synthesis: none;
+  -webkit-tap-highlight-color: transparent;
+  overflow-x: clip;
+  cursor: default;
+  caret-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+a,
+button,
+label {
+  cursor: pointer;
+}
+
+.playing-card {
+  filter: drop-shadow(0 6px 0 var(--card-shadow));
+  transform: translateY(var(--lift, 0)) rotate(var(--tilt, 0deg));
+  transition: transform 160ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.playing-card:hover {
+  transform: translateY(calc(var(--lift, 0px) - 12px)) rotate(calc(var(--tilt, 0deg) * 0.6));
+}
+
+.pixel-box,
+.pixel-button,
+.pixel-panel {
+  --step: 3px;
+  clip-path: polygon(
+    0 var(--step),
+    var(--step) var(--step),
+    var(--step) 0,
+    calc(100% - var(--step)) 0,
+    calc(100% - var(--step)) var(--step),
+    100% var(--step),
+    100% calc(100% - var(--step)),
+    calc(100% - var(--step)) calc(100% - var(--step)),
+    calc(100% - var(--step)) 100%,
+    var(--step) 100%,
+    var(--step) calc(100% - var(--step)),
+    0 calc(100% - var(--step))
+  );
+}
+
+.pixel-panel {
+  --step: 8px;
+}
+
+.pixel-button {
+  font-size: var(--size-base);
+  line-height: 1.1;
+}
+
+button.pixel-box[class*='bg-'],
+.pixel-button {
+  box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.22);
+  transition: translate 80ms steps(2);
+}
+
+button.pixel-box[class*='bg-']:active,
+.pixel-button:active {
+  translate: 0 2px;
+  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.22);
+}
+
+.pixel-check {
+  appearance: none;
+  flex: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 2px solid var(--ink);
+  background: var(--raised);
+}
+
+.pixel-check:checked {
+  background: var(--accent);
+  box-shadow: inset 0 0 0 2px var(--surface);
+}
+
+.card-face {
+  --step: 2px;
+  background: var(--card);
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.55),
+    inset 0 -3px 0 rgba(23, 56, 43, 0.14);
+  clip-path: polygon(
+    0 var(--step),
+    var(--step) var(--step),
+    var(--step) 0,
+    calc(100% - var(--step)) 0,
+    calc(100% - var(--step)) var(--step),
+    100% var(--step),
+    100% calc(100% - var(--step)),
+    calc(100% - var(--step)) calc(100% - var(--step)),
+    calc(100% - var(--step)) 100%,
+    var(--step) 100%,
+    var(--step) calc(100% - var(--step)),
+    0 calc(100% - var(--step))
+  );
+}
+
+.score-live {
+  box-shadow: 0 0 0 2px var(--gold);
+}
+
+.card-face.hero-card {
+  --step: 6px;
+}
+
+.card-face.card-bonus {
+  background: #bfe8c4;
+}
+
+.card-face.card-danger {
+  background: #f7c3b8;
+}
+
+.card-shadow {
+  filter: drop-shadow(0 3px 0 rgba(0, 0, 0, 0.35));
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.12);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--gold);
+  box-shadow: inset -2px -2px 0 rgba(0, 0, 0, 0.3);
+}
+
+::-webkit-scrollbar-button {
+  display: none;
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  * {
+    scrollbar-color: var(--gold) transparent;
+    scrollbar-width: thin;
+  }
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.parchment {
+  --step: 6px;
+  --ink: #3f2810;
+  --muted: #62431f;
+  --raised: #dcc48d;
+  --gold: #8a4f10;
+  --line: rgba(63, 40, 16, 0.3);
+  --accent: #6b3f14;
+  --on-accent: #f4e6c3;
+  --table-hearts: #a32a22;
+  --table-diamonds: #a32a22;
+  color: var(--ink);
+  background-color: #ecd9ab;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' shape-rendering='crispEdges'%3E%3Cg fill='%237a5424' fill-opacity='.12'%3E%3Crect x='6' y='9' width='3' height='3'/%3E%3Crect x='30' y='3' width='3' height='3'/%3E%3Crect x='18' y='24' width='3' height='3'/%3E%3Crect x='39' y='33' width='3' height='3'/%3E%3Crect x='9' y='39' width='3' height='3'/%3E%3C/g%3E%3C/svg%3E");
+  background-attachment: local;
+  box-shadow:
+    inset 0 0 0 3px #6b3f14,
+    inset 0 0 0 6px #d6bb7f;
+}
+
+.hero-icon {
+  filter: drop-shadow(0 6px 0 var(--card-shadow));
+  image-rendering: pixelated;
+}
+
+.overlay-fade {
+  animation: overlay-fade 180ms ease-out both;
+}
+
+.overlay-pop {
+  animation: overlay-pop 150ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes overlay-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes overlay-pop {
+  from {
+    transform: scale(0.9) translateY(12px);
+  }
+}
+
+.reduce-motion :is(.overlay-fade, .overlay-pop) {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay-fade,
+  .overlay-pop {
+    animation: none;
+  }
+}
