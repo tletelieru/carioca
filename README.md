@@ -9,6 +9,12 @@ No account and no backend. Everything runs on your device, and your match is sav
 - **Deck:** Two standard decks and 4 jokers, 108 cards, 12 per player
 - **Live:** https://tletelieru.github.io/carioca/
 
+<p align="center">
+  <img src="docs/screenshots/home.png" alt="Home screen with the ten contracts" width="260">
+  <img src="docs/screenshots/table.png" alt="A round in play against three bots" width="260">
+  <img src="docs/screenshots/rules.png" alt="Rules with card examples" width="260">
+</p>
+
 ## The ten contracts
 
 Lowest total after the ten rounds wins.
@@ -78,6 +84,9 @@ pnpm dev        # http://localhost:5173/carioca/
 | `pnpm typecheck` | Runs the type checks |
 | `pnpm build` | Builds the app |
 | `pnpm sim` | Plays the bot ladder: medium vs easy, hard vs medium, hard vs easy |
+
+The screenshots above come from `apps/client/scripts/readme-shots.mjs`, which drives the dev server on
+port 5199 with Playwright.
 | `pnpm sim --hero hard --field medium --matches 100 --players 3` | Plays one pairing |
 
 ## How it works
