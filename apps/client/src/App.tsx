@@ -118,15 +118,11 @@ export default function App() {
         }`}
       >
         <Header
-          otherGames={
-            session
-              ? null
-              : {
-                  on: otherGamesOn,
-                  onOpen: () => setOtherGamesOpen(true),
-                  onToggle: () => showOtherGames(!otherGamesOn),
-                }
-          }
+          otherGames={{
+            on: otherGamesOn,
+            onOpen: () => setOtherGamesOpen(true),
+            onToggle: session ? null : () => showOtherGames(!otherGamesOn),
+          }}
           textSize={textSize}
           onInstall={install}
           settingsOpen={settingsOpen}
@@ -186,6 +182,7 @@ export default function App() {
         )}
         {rulesOpen && <Rules onClose={() => setRulesOpen(false)} />}
         {historyOpen && <History onClose={() => setHistoryOpen(false)} />}
+        {otherGamesOpen && <OtherGamesDialog onClose={() => setOtherGamesOpen(false)} />}
         {session ? (
           <Table
             key={session.seed}
@@ -215,7 +212,6 @@ export default function App() {
               }}
             />
             {otherGamesOn && <OtherGamesAside textSize={textSize} />}
-            {otherGamesOpen && <OtherGamesDialog onClose={() => setOtherGamesOpen(false)} />}
             <Footer />
           </>
         )}

@@ -6,12 +6,12 @@ import { GamesIcon, GamesOffIcon, GearIcon, InstallIcon } from './icons'
 interface OtherGamesButtons {
   on: boolean
   onOpen: () => void
-  onToggle: () => void
+  onToggle: (() => void) | null
 }
 
 interface Props {
   onInstall: (() => void) | null
-  otherGames: OtherGamesButtons | null
+  otherGames: OtherGamesButtons
   textSize: TextSize
   settingsOpen: boolean
   onSettings: () => void
@@ -22,7 +22,9 @@ const iconButton = `flex ${iconShape}`
 
 export function Header({ onInstall, otherGames, textSize, settingsOpen, onSettings }: Props) {
   const t = useMessages()
-  const toggleLabel = otherGames?.on ? t.hideOtherGames : t.showOtherGames
+  const { on, onOpen, onToggle } = otherGames
+  const toggleLabel = on ? t.hideOtherGames : t.showOtherGames
+  const openClass = onToggle ? `${iconButton} ${sideColumn[textSize].hide}` : iconButton
 
   return (
     <header className="flex items-center gap-2">
@@ -43,27 +45,25 @@ export function Header({ onInstall, otherGames, textSize, settingsOpen, onSettin
           <InstallIcon />
         </button>
       )}
-      {otherGames?.on && (
-        <button
-          type="button"
-          aria-label={t.otherGames}
-          title={t.otherGames}
-          onClick={otherGames.onOpen}
-          className={`${iconButton} ${sideColumn[textSize].hide}`}
-        >
-          <GamesIcon />
-        </button>
-      )}
-      {otherGames && (
+      <button
+        type="button"
+        aria-label={t.otherGames}
+        title={t.otherGames}
+        onClick={onOpen}
+        className={openClass}
+      >
+        <GamesIcon />
+      </button>
+      {onToggle && (
         <button
           type="button"
           aria-label={toggleLabel}
-          aria-pressed={otherGames.on}
+          aria-pressed={on}
           title={toggleLabel}
-          onClick={otherGames.onToggle}
+          onClick={onToggle}
           className={`hidden ${iconShape} ${sideColumn[textSize].flex}`}
         >
-          {otherGames.on ? <GamesIcon /> : <GamesOffIcon />}
+          {on ? <GamesIcon /> : <GamesOffIcon />}
         </button>
       )}
       <button
