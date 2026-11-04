@@ -19,6 +19,7 @@ export function Overlay({
   const backdrop = translucent ? 'bg-black/40' : 'bg-black/60'
   const fill = translucent ? 'bg-surface/90 backdrop-blur-md' : 'bg-surface'
 
+  // eslint-disable-next-line local/no-effect -- subscribes to the Escape key on window while the overlay is open
   useEffect(() => {
     if (!onClose) return
     const closeOnEscape = (event: KeyboardEvent) => {
