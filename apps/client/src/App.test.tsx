@@ -122,6 +122,17 @@ describe('App', () => {
     expect(within(dialog).queryByRole('link', { name: /Carioca/ })).toBeNull()
   })
 
+  it('opens the other games from the header during a match', async () => {
+    localStorage.setItem('preferred-lang', 'en')
+    render(<App />)
+    await userEvent.click(screen.getByRole('button', { name: '2 players' }))
+    expect(screen.queryByRole('complementary', { name: 'Other games' })).toBeNull()
+    expect(screen.queryByRole('button', { name: 'Hide other games' })).toBeNull()
+    await userEvent.click(screen.getByRole('button', { name: 'Other games' }))
+    const dialog = screen.getByRole('dialog', { name: 'Other games' })
+    expect(within(dialog).getAllByRole('link')).toHaveLength(5)
+  })
+
   it('hides the other games from settings', async () => {
     localStorage.setItem('preferred-lang', 'en')
     render(<App />)
@@ -129,7 +140,7 @@ describe('App', () => {
     await userEvent.click(screen.getByRole('checkbox', { name: /^Show other games/ }))
     expect(localStorage.getItem('other-games')).toBe('off')
     expect(screen.queryByRole('complementary', { name: 'Other games' })).toBeNull()
-    expect(screen.queryByRole('button', { name: 'Other games' })).toBeNull()
+    expect(screen.getByRole('button', { name: 'Other games' })).toBeTruthy()
     expect(screen.getByRole('button', { name: 'Show other games' }).getAttribute('aria-pressed')).toBe('false')
   })
 
