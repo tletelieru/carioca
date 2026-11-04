@@ -34,6 +34,20 @@
   --card-shadow: rgba(0, 0, 0, 0.5);
 }
 
+:root,
+.dark {
+  --card-clubs: var(--card-ink);
+  --card-diamonds: var(--card-red);
+  --card-hearts: var(--card-red);
+  --card-spades: var(--card-ink);
+}
+
+.four-colors {
+  --card-clubs: #15803d;
+  --card-diamonds: #d9620a;
+  --card-spades: #111111;
+}
+
 :root {
   --game-font: 'VT323', ui-monospace, monospace;
   --size-xs: 0.95rem;
@@ -61,6 +75,10 @@
   --color-card: var(--card);
   --color-card-ink: var(--card-ink);
   --color-card-red: var(--card-red);
+  --color-card-clubs: var(--card-clubs);
+  --color-card-diamonds: var(--card-diamonds);
+  --color-card-hearts: var(--card-hearts);
+  --color-card-spades: var(--card-spades);
   --font-pixel: var(--game-font);
   --text-xs: var(--size-xs);
   --text-sm: var(--size-sm);
@@ -91,6 +109,7 @@ a,
 button,
 label {
   cursor: pointer;
+  touch-action: manipulation;
 }
 
 .playing-card {
@@ -278,13 +297,305 @@ button.pixel-box[class*='bg-']:active,
   }
 }
 
-.reduce-motion :is(.overlay-fade, .overlay-pop) {
+.back-pattern {
+  border: 2px solid var(--card);
+  background: repeating-linear-gradient(45deg, var(--accent) 0 4px, var(--raised) 4px 8px);
+}
+
+.card-back {
+  position: absolute;
+  width: 2rem;
+  height: 3rem;
+  margin: -1.5rem 0 0 -1rem;
+  border: 2px solid var(--card);
+  background: repeating-linear-gradient(45deg, var(--accent) 0 4px, var(--raised) 4px 8px);
+}
+
+.confetti {
+  animation: confetti-fall var(--fall) var(--delay) linear both;
+}
+
+.rain {
+  animation: rain-fall var(--fall) var(--delay) linear both;
+}
+
+.result-win {
+  animation: result-win 700ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.result-lose {
+  animation: result-lose 500ms 200ms ease-in-out both;
+}
+
+.deal-flight {
+  animation: deal-flight 420ms var(--delay, 0ms) cubic-bezier(0.2, 0.7, 0.3, 1) both;
+}
+
+.deal-in {
+  animation: deal-in 360ms calc(var(--delay, 0ms) + 500ms) cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.hand-card {
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  transition:
+    transform 160ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    opacity 200ms;
+}
+
+.hand-card.is-dragging {
+  position: relative;
+  z-index: 20;
+  cursor: grabbing;
+  opacity: 1;
+  filter: drop-shadow(0 8px 6px rgba(0, 0, 0, 0.5));
+  transform: scale(1.12) rotate(3deg);
+}
+
+.hand-card.is-picked {
+  transform: translateY(-12px) rotate(-2deg);
+}
+
+.hand-card.is-dimmed {
+  filter: saturate(0.25) brightness(0.72);
+}
+
+.hand-card:not(.is-dimmed, .is-dragging, .is-picked):hover {
+  transform: translateY(-4px);
+}
+
+.meld-target {
+  box-shadow: 0 0 0 2px var(--gold);
+}
+
+.card-drop {
+  animation: card-drop 260ms cubic-bezier(0.2, 0.8, 0.3, 1.2) both;
+}
+
+.fan-card {
+  display: block;
+  flex: none;
+  border-width: 1px;
+  transition:
+    margin-left 240ms ease,
+    transform 240ms ease;
+}
+
+.fan-in {
+  animation: score-pop 300ms 900ms ease-out both;
+}
+
+.fan-active {
+  animation: fan-active 800ms ease-in-out infinite;
+}
+
+@keyframes fan-active {
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+.turn-glow {
+  animation: turn-glow 1100ms ease-in-out infinite;
+}
+
+.score-pop {
+  animation: score-pop 300ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.reduce-motion :is(.playing-card, .hand-card, .fan-card) {
+  transition: none;
+}
+
+.reduce-motion :is(.deal-flight, .confetti, .rain) {
+  display: none;
+}
+
+.reduce-motion
+  :is(
+    .deal-in,
+    .card-drop,
+    .fan-in,
+    .fan-active,
+    .turn-glow,
+    .score-pop,
+    .result-win,
+    .result-lose,
+    .overlay-fade,
+    .overlay-pop
+  ) {
+  animation: none;
+}
+
+@keyframes confetti-fall {
+  from {
+    transform: translateY(-20px) rotate(0deg);
+  }
+  to {
+    transform: translateY(105vh) rotate(540deg);
+  }
+}
+
+@keyframes rain-fall {
+  from {
+    transform: translateY(-20px);
+  }
+  to {
+    transform: translateY(105vh);
+  }
+}
+
+@keyframes result-win {
+  from {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+}
+
+@keyframes result-lose {
+  25% {
+    transform: translateX(-6px);
+  }
+  75% {
+    transform: translateX(6px);
+  }
+}
+
+@keyframes deal-flight {
+  from {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  90% {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    transform: translate(var(--to-x), var(--to-y)) rotate(200deg);
+  }
+}
+
+@keyframes deal-in {
+  from {
+    opacity: 0;
+    transform: translateY(-120px) rotateY(90deg) scale(0.6);
+  }
+}
+
+@keyframes card-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-14px) rotate(-8deg) scale(0.8);
+  }
+}
+
+@keyframes turn-glow {
+  50% {
+    background-color: var(--raised);
+  }
+}
+
+@keyframes score-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .playing-card,
+  .hand-card,
+  .fan-card {
+    transition: none;
+  }
+
+  .deal-flight,
+  .confetti,
+  .rain {
+    display: none;
+  }
+
+  .deal-in,
+  .card-drop,
+  .fan-in,
+  .fan-active,
+  .turn-glow,
+  .score-pop,
+  .result-win,
+  .result-lose,
+  .overlay-fade,
+  .overlay-pop {
+    animation: none;
+  }
+}
+
+.dealer-spotlight {
+  background-color: color-mix(in srgb, var(--gold) 35%, var(--surface));
+  box-shadow: 0 0 0 2px var(--gold);
+}
+
+.slid-card {
+  position: absolute;
+  top: 0;
+  width: 2.75rem;
+  height: 4rem;
+  transform: rotate(var(--tilt, 0deg));
+  transition:
+    left 200ms ease-out,
+    top 120ms ease-out;
+}
+
+.reveal-in {
+  animation: reveal-in 320ms var(--delay, 0ms) cubic-bezier(0.2, 0.8, 0.3, 1.1) both;
+}
+
+@keyframes reveal-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.96);
+  }
+}
+
+.reduce-motion .reveal-in {
+  animation: none;
+}
+
+.reduce-motion .slid-card {
+  transition: none;
+}
+
+.deck-slide {
+  animation: deck-slide 600ms 850ms cubic-bezier(0.2, 0.8, 0.3, 1) both;
+}
+
+@keyframes deck-slide {
+  from {
+    opacity: 0;
+    transform: translateX(-70vw) rotate(-6deg);
+  }
+}
+
+.turn-up {
+  animation: turn-up 360ms 1350ms ease-out both;
+}
+
+@keyframes turn-up {
+  from {
+    opacity: 0;
+    transform: rotateY(90deg) scale(0.8);
+  }
+}
+
+.reduce-motion :is(.deck-slide, .turn-up) {
   animation: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .overlay-fade,
-  .overlay-pop {
+  .deck-slide,
+  .turn-up,
+  .reveal-in {
     animation: none;
   }
 }

@@ -7,6 +7,7 @@ interface InstallPrompt extends Event {
 export function useInstall() {
   const [prompt, setPrompt] = useState<InstallPrompt | null>(null)
 
+  // eslint-disable-next-line local/no-effect -- subscribes to the browser install prompt events
   useEffect(() => {
     const capture = (event: Event) => {
       event.preventDefault()
